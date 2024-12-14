@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MinhThuShop</title>
+    <script>
+        let selectedTable = null;
+
+        function selectTable(tableNumber) {
+            selectedTable = tableNumber;
+            document.getElementById('selectedTable').textContent = `Bàn: ${tableNumber}`;
+        }
+
+        function saveProduct() {
+            if (!selectedTable) {
+                alert("Vui lòng chọn bàn trước khi lưu!");
+                return;
+            }
+
+            const productName = document.getElementById('productName').value;
+            const productPrice = document.getElementById('productPrice').value;
+            const productQuantity = document.getElementById('productQuantity').value;
+
+            if (!productName || !productPrice || !productQuantity) {
+                alert("Vui lòng nhập đầy đủ thông tin sản phẩm!");
+                return;
+            }
+
+            // Lấy dữ liệu bàn hiện tại từ LocalStorage
+            let tableData = JSON.parse(localStorage.getItem(`table_${selectedTable}`)) || [];
+
+            // Thêm sản phẩm mới vào bàn
+            tableData.push({ 
+                name: productName, 
+                price: productPrice, 
+                quantity: productQuantity 
+            });
+
+            // Cập nhật dữ liệu vào LocalStorage
+            localStorage.setItem(`table_${selectedTable}`, JSON.stringify(tableData));
+
+            alert(`Dữ liệu đã được lưu vào bàn ${selectedTable}`);
+            window.location.href = 'save.html';
+        }
+    </script>
+</head>
+<body>
+    <h1>MINHTHUSHOP</h1>
+    
+    <!-- Dãy bàn -->
+    <h3>Chọn Bàn:</h3>
+    <div style="display: flex; gap: 10px;">
+        <!-- Tạo 10 bàn -->
+        <button onclick="selectTable(1)">Bàn 1</button>
+        <button onclick="selectTable(2)">Bàn 2</button>
+        <button onclick="selectTable(3)">Bàn 3</button>
+        <button onclick="selectTable(4)">Bàn 4</button>
+        <button onclick="selectTable(5)">Bàn 5</button>
+        <button onclick="selectTable(6)">Bàn 6</button>
+        <button onclick="selectTable(7)">Bàn 7</button>
+        <button onclick="selectTable(8)">Bàn 8</button>
+        <button onclick="selectTable(9)">Bàn 9</button>
+        <button onclick="selectTable(10)">Bàn 10</button>
+    </div>
+    <p id="selectedTable">Chưa chọn bàn</p>
+
+    <!-- Nhập thông tin sản phẩm -->
+    <h3>Nhập Thông Tin Sản Phẩm:</h3>
+    <form onsubmit="event.preventDefault(); saveProduct();">
+        <label for="productName">Tên sản phẩm:</label><br>
+        <input type="text" id="productName" name="productName" required><br><br>
+
+        <label for="productPrice">Giá sản phẩm:</label><br>
+        <input type="text" id="productPrice" name="productPrice" required><br><br>
+
+        <label for="productQuantity">Số lượng:</label><br>
+        <input type="number" id="productQuantity" name="productQuantity" min="1" required><br><br>
+
+        <button type="submit">Lưu</button>
+    </form>
+</body>
+</html>
