@@ -26,6 +26,7 @@
                                     <th>Tên Sản Phẩm</th>
                                     <th>Giá Sản Phẩm</th>
                                     <th>Số lượng</th>
+                                    <th>Hành động</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -35,6 +36,9 @@
                                         <td>${product.name}</td>
                                         <td>${product.price}</td>
                                         <td>${product.quantity}</td>
+                                        <td>
+                                            <button onclick="deleteRow(${i}, ${index})">Xóa</button>
+                                        </td>
                                     </tr>
                                 `).join('')}
                             </tbody>
@@ -45,12 +49,23 @@
             }
         }
 
-        // Hàm xóa dữ liệu của một bàn cụ thể
+        // Hàm xóa toàn bộ dữ liệu của một bàn
         function clearTableData(tableNumber) {
             if (confirm(`Bạn có chắc chắn muốn xóa toàn bộ dữ liệu của bàn ${tableNumber}?`)) {
                 localStorage.removeItem(`table_${tableNumber}`);
                 alert(`Dữ liệu của bàn ${tableNumber} đã được xóa!`);
                 displayTableData(); // Cập nhật lại giao diện sau khi xóa
+            }
+        }
+
+        // Hàm xóa một hàng trong một bàn
+        function deleteRow(tableNumber, rowIndex) {
+            const tableData = JSON.parse(localStorage.getItem(`table_${tableNumber}`)) || [];
+            if (rowIndex < tableData.length) {
+                tableData.splice(rowIndex, 1); // Xóa sản phẩm ở vị trí rowIndex
+                localStorage.setItem(`table_${tableNumber}`, JSON.stringify(tableData)); // Cập nhật lại LocalStorage
+                alert(`Sản phẩm đã được xóa khỏi bàn ${tableNumber}`);
+                displayTableData(); // Cập nhật lại giao diện
             }
         }
 
